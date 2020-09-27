@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "cidade")
+@Table(name = "estado")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Estado {
