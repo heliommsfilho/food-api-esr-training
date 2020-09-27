@@ -1,7 +1,5 @@
 package com.github.heliommsfilho.foodapi.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -11,7 +9,6 @@ import javax.persistence.*;
 @Table(name = "cozinha")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@JsonRootName(value = "gastronomia")
 public class Cozinha {
 
     @Id
@@ -20,7 +17,7 @@ public class Cozinha {
     private Long id;
 
     //@JsonIgnore
-    @JsonProperty(value = "titulo")
+    //@JsonProperty(value = "titulo")
     @Column(name = "nome")
     private String nome;
 }
