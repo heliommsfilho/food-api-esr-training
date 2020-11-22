@@ -18,8 +18,7 @@ public class RestauranteRepositoryImpl implements RestauranteRepository {
 
     @Override
     public List<Restaurante> todos() {
-        return manager.createQuery("from Restaurante", Restaurante.class)
-                .getResultList();
+        return manager.createQuery("select r from Restaurante r", Restaurante.class).getResultList();
     }
 
     @Override
@@ -37,7 +36,7 @@ public class RestauranteRepositoryImpl implements RestauranteRepository {
     @Override
     public void remover(Restaurante restaurante) {
         Optional<Restaurante> restauranteOptional = buscar(restaurante.getId());
-        restauranteOptional.ifPresent(r ->manager.remove(r));
+        restauranteOptional.ifPresent(r -> manager.remove(r));
     }
 
 }

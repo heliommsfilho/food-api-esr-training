@@ -1,6 +1,6 @@
 package com.github.heliommsfilho.foodapi.controller;
 
-import com.github.heliommsfilho.foodapi.domain.exception.EntidadeNãoEncontradaException;
+import com.github.heliommsfilho.foodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.github.heliommsfilho.foodapi.domain.model.Restaurante;
 import com.github.heliommsfilho.foodapi.domain.repository.RestauranteRepository;
 import com.github.heliommsfilho.foodapi.domain.service.CadastroRestauranteService;
@@ -43,7 +43,7 @@ public class RestauranteController {
         try {
             Restaurante restauranteSalvo = cadastroRestauranteService.salvar(restaurante);
             return ResponseEntity.status(HttpStatus.CREATED).body(restauranteSalvo);
-        } catch (EntidadeNãoEncontradaException e) {
+        } catch (EntidadeNaoEncontradaException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -62,7 +62,7 @@ public class RestauranteController {
         try {
             Restaurante restauranteAtualizado = cadastroRestauranteService.salvar(restauranteAtual);
             return ResponseEntity.ok(restauranteAtualizado);
-        } catch (EntidadeNãoEncontradaException e) {
+        } catch (EntidadeNaoEncontradaException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

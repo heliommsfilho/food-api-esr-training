@@ -1,7 +1,7 @@
 package com.github.heliommsfilho.foodapi.domain.service;
 
 import com.github.heliommsfilho.foodapi.domain.exception.EntidadeEmUsoException;
-import com.github.heliommsfilho.foodapi.domain.exception.EntidadeNãoEncontradaException;
+import com.github.heliommsfilho.foodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.github.heliommsfilho.foodapi.domain.model.Cozinha;
 import com.github.heliommsfilho.foodapi.domain.repository.CozinhaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class CadastroCozinhaService {
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(String.format("Cozinha de código %d não pode ser removida, pois está em uso", id));
         } catch (EmptyResultDataAccessException e) {
-            throw new EntidadeNãoEncontradaException(String.format("Cozinha de código %d não pôde ser encontrada", id));
+            throw new EntidadeNaoEncontradaException(String.format("Cozinha de código %d não pôde ser encontrada", id));
         }
     }
 }

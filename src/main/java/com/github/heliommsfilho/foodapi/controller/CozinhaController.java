@@ -1,7 +1,7 @@
 package com.github.heliommsfilho.foodapi.controller;
 
 import com.github.heliommsfilho.foodapi.domain.exception.EntidadeEmUsoException;
-import com.github.heliommsfilho.foodapi.domain.exception.EntidadeNãoEncontradaException;
+import com.github.heliommsfilho.foodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.github.heliommsfilho.foodapi.domain.model.Cozinha;
 import com.github.heliommsfilho.foodapi.domain.repository.CozinhaRepository;
 import com.github.heliommsfilho.foodapi.domain.service.CadastroCozinhaService;
@@ -68,7 +68,7 @@ public class CozinhaController {
             return ResponseEntity.noContent().build();
         } catch (EntidadeEmUsoException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        } catch (EntidadeNãoEncontradaException e) {
+        } catch (EntidadeNaoEncontradaException e) {
             return ResponseEntity.notFound().build();
         }
     }

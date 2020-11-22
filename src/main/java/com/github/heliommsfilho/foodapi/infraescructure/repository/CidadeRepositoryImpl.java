@@ -1,13 +1,16 @@
 package com.github.heliommsfilho.foodapi.infraescructure.repository;
 
 import com.github.heliommsfilho.foodapi.domain.model.Cidade;
+import com.github.heliommsfilho.foodapi.domain.model.Estado;
 import com.github.heliommsfilho.foodapi.domain.repository.CidadeRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class CidadeRepositoryImpl implements CidadeRepository {
@@ -17,13 +20,12 @@ public class CidadeRepositoryImpl implements CidadeRepository {
 
     @Override
     public List<Cidade> listar() {
-        return manager.createQuery("from Cidade", Cidade.class)
-                .getResultList();
+        return manager.createQuery("select c from Cidade c", Cidade.class).getResultList();
     }
 
     @Override
-    public Cidade buscar(Long id) {
-        return manager.find(Cidade.class, id);
+    public Optional<Cidade> buscar(Long id) {
+        return Optional.ofNullable(manager.find(Cidade.class, id));
     }
 
     @Transactional
@@ -34,8 +36,10 @@ public class CidadeRepositoryImpl implements CidadeRepository {
 
     @Transactional
     @Override
-    public void remover(Cidade cidade) {
-        cidade = buscar(cidade.getId());
+    public void remover(Long id) {
+        Optional<Cidade> cidadeOptional = buscar(id);
+        Cidade cidade = cidadeOptional.orElseThrow(() -> new EmptyResultDataAccessException(1));
+
         manager.remove(cidade);
     }
 
