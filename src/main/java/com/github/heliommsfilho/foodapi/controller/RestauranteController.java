@@ -4,6 +4,7 @@ import com.github.heliommsfilho.foodapi.domain.exception.EntidadeNãoEncontradaE
 import com.github.heliommsfilho.foodapi.domain.model.Restaurante;
 import com.github.heliommsfilho.foodapi.domain.repository.RestauranteRepository;
 import com.github.heliommsfilho.foodapi.domain.service.CadastroRestauranteService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +43,25 @@ public class RestauranteController {
         try {
             Restaurante restauranteSalvo = cadastroRestauranteService.salvar(restaurante);
             return ResponseEntity.status(HttpStatus.CREATED).body(restauranteSalvo);
+        } catch (EntidadeNãoEncontradaException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody Restaurante restaurante) {
+        Optional<Restaurante> restauranteOptional = restauranteRepository.buscar(id);
+
+        if (restauranteOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Restaurante restauranteAtual = restauranteOptional.get();
+        BeanUtils.copyProperties(restaurante, restauranteAtual, "id");
+
+        try {
+            Restaurante restauranteAtualizado = cadastroRestauranteService.salvar(restauranteAtual);
+            return ResponseEntity.ok(restauranteAtualizado);
         } catch (EntidadeNãoEncontradaException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
