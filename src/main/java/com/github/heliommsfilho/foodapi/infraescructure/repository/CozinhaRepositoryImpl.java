@@ -2,12 +2,14 @@ package com.github.heliommsfilho.foodapi.infraescructure.repository;
 
 import com.github.heliommsfilho.foodapi.domain.model.Cozinha;
 import com.github.heliommsfilho.foodapi.domain.repository.CozinhaRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class CozinhaRepositoryImpl implements CozinhaRepository {
@@ -17,13 +19,12 @@ public class CozinhaRepositoryImpl implements CozinhaRepository {
 
     @Override
     public List<Cozinha> listar() {
-        return manager.createQuery("from Cozinha", Cozinha.class)
-                .getResultList();
+        return manager.createQuery("from Cozinha", Cozinha.class).getResultList();
     }
 
     @Override
-    public Cozinha buscar(Long id) {
-        return manager.find(Cozinha.class, id);
+    public Optional<Cozinha> buscar(Long id) {
+        return Optional.ofNullable(manager.find(Cozinha.class, id));
     }
 
     @Transactional
@@ -34,9 +35,9 @@ public class CozinhaRepositoryImpl implements CozinhaRepository {
 
     @Transactional
     @Override
-    public void remover(Cozinha cozinha) {
-        cozinha = buscar(cozinha.getId());
+    public void remover(Long id) {
+        Optional<Cozinha> cozinhaOptional = buscar(id);
+        Cozinha cozinha = cozinhaOptional.orElseThrow(() -> new EmptyResultDataAccessException(1));
         manager.remove(cozinha);
     }
-
 }

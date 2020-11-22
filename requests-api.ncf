@@ -1,0 +1,616 @@
+{
+  "ActiveWorkspaceId": null,
+  "Workspaces": [
+    {
+      "Id": "85f5d8d1-adcc-42e2-879d-528755172d11",
+      "Name": "Spécialiste Spring REST",
+      "ParentId": "root",
+      "Methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "HEAD",
+        "OPTIONS",
+        "PATCH",
+        "MERGE",
+        "COPY"
+      ],
+      "OpenItemIds": [
+        "c1b15c6b-fda9-4fca-9584-f9fa3a2c3c0a",
+        "968bbe92-2891-4852-bea8-8049d9bc8706"
+      ],
+      "TempItems": [],
+      "Items": [
+        {
+          "Id": "2554b57b-227f-42a2-80be-e48afd43913c",
+          "IsTemporary": false,
+          "Properties": {
+            "CollectionPivotIndex": 0
+          },
+          "Url": {
+            "Base": null,
+            "Queries": []
+          },
+          "Auth": {
+            "Id": null,
+            "ParentId": null,
+            "AuthType": 0,
+            "OAuth2GrantType": 0,
+            "AuthProperties": null
+          },
+          "Body": {
+            "Id": null,
+            "ParentId": null,
+            "BodyType": 0,
+            "FormEncodedData": [],
+            "FormDataList": []
+          },
+          "MockData": {
+            "Body": null,
+            "StatusCode": 200,
+            "ContentType": "application/json"
+          },
+          "Children": [
+            {
+              "Id": "c1b15c6b-fda9-4fca-9584-f9fa3a2c3c0a",
+              "IsTemporary": false,
+              "Properties": {
+                "RequestPivotIndex": 3
+              },
+              "Url": {
+                "Base": "http://localhost:8080/cozinhas/1",
+                "Queries": []
+              },
+              "Auth": {
+                "Id": null,
+                "ParentId": null,
+                "AuthType": 0,
+                "OAuth2GrantType": 0,
+                "AuthProperties": null
+              },
+              "Body": {
+                "Id": null,
+                "ParentId": null,
+                "BodyType": 1,
+                "JsonBody": "{\r\n\t\"nome\": \"Baiana\"\r\n}",
+                "FormEncodedData": [],
+                "FormDataList": []
+              },
+              "MockData": {
+                "Body": null,
+                "StatusCode": 200,
+                "ContentType": "application/json"
+              },
+              "Children": [],
+              "Headers": [],
+              "ChainingRules": [],
+              "Type": 1,
+              "Name": "Atualizar Cozinha",
+              "IsExpanded": false,
+              "Method": "PUT",
+              "Response": {
+                "Successful": false,
+                "RequestBaseUrl": null,
+                "StatusCode": 0,
+                "StatusDescription": "Error",
+                "TimeElapsed": 14387,
+                "TestsAllPass": null,
+                "Body": "An error occurred while sending the request.\r\n   at System.Net.Http.HttpClientHandler.<SendAsync>d__113.MoveNext() + 0x361\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw() + 0x21\r\n   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task) + 0x70\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task) + 0x38\r\n   at System.Runtime.CompilerServices.TaskAwaiter.ValidateEnd(Task) + 0x17\r\n   at System.Net.Http.HttpClient.<FinishSendAsyncBuffered>d__62.MoveNext() + 0x316\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw() + 0x21\r\n   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task) + 0x70\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task) + 0x38\r\n   at System.Runtime.CompilerServices.TaskAwaiter.ValidateEnd(Task) + 0x17\r\n   at Nightingale.Core.Client.NightingaleClient.<SendAsync>d__7.MoveNext() + 0x26c\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw() + 0x21\r\n   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task) + 0x70\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task) + 0x38\r\n   at System.Runtime.CompilerServices.TaskAwaiter.ValidateEnd(Task) + 0x17\r\n   at Nightingale.Core.Services.RequestSender.<SendRequestAsync>d__5.MoveNext() + 0x152\r\n",
+                "ContentType": null,
+                "Cookies": [],
+                "Headers": [],
+                "Log": "Unexpected error while sending request. An error occurred while sending the request."
+              }
+            },
+            {
+              "Id": "968bbe92-2891-4852-bea8-8049d9bc8706",
+              "IsTemporary": false,
+              "Properties": {
+                "RequestPivotIndex": 2
+              },
+              "Url": {
+                "Base": "http://127.0.0.1:8080/cozinhas/1",
+                "Queries": []
+              },
+              "Auth": {
+                "Id": null,
+                "ParentId": null,
+                "AuthType": 0,
+                "OAuth2GrantType": 0,
+                "AuthProperties": {}
+              },
+              "Body": {
+                "Id": null,
+                "ParentId": null,
+                "BodyType": 0,
+                "JsonBody": "{\r\n\t\"nome\": \"Baiana\"\r\n}",
+                "FormEncodedData": [],
+                "FormDataList": []
+              },
+              "MockData": {
+                "Body": null,
+                "StatusCode": 200,
+                "ContentType": "application/json"
+              },
+              "Children": [],
+              "Headers": [
+                {
+                  "Id": null,
+                  "ParentId": null,
+                  "Key": "Response-Type",
+                  "Value": "application/json",
+                  "Enabled": false,
+                  "Private": false,
+                  "Type": 1
+                }
+              ],
+              "ChainingRules": [],
+              "Type": 1,
+              "Name": "Buscar Cozinha",
+              "IsExpanded": false,
+              "Method": "GET",
+              "Response": {
+                "Successful": true,
+                "RequestBaseUrl": "http://127.0.0.1:8080/cozinhas/1?",
+                "StatusCode": 200,
+                "StatusDescription": "",
+                "TimeElapsed": 29,
+                "TestsAllPass": null,
+                "Body": "{\"id\":1,\"nome\":\"Tailandesa\"}",
+                "ContentType": "application/json",
+                "Cookies": [],
+                "Headers": [
+                  {
+                    "Key": "Connection",
+                    "Value": "keep-alive"
+                  },
+                  {
+                    "Key": "Transfer-Encoding",
+                    "Value": "chunked"
+                  },
+                  {
+                    "Key": "Keep-Alive",
+                    "Value": "timeout=60"
+                  },
+                  {
+                    "Key": "Date",
+                    "Value": "Sun, 25 Oct 2020 10:39:37 GMT"
+                  },
+                  {
+                    "Key": "Content-Type",
+                    "Value": "application/json"
+                  }
+                ],
+                "Log": "GET\r\nhttp://127.0.0.1:8080/cozinhas/1\r\n\r\nSending request\r\n"
+              }
+            }
+          ],
+          "Headers": [],
+          "ChainingRules": [],
+          "Type": 2,
+          "Name": "Cozinhas",
+          "IsExpanded": false,
+          "Method": "GET",
+          "Response": null
+        }
+      ],
+      "HistoryItems": [
+        {
+          "LastUsedDate": "2020-10-25T10:29:05.8803736+00:00",
+          "Id": "cca283bc-19a0-4c4c-b617-7bbad09ad9c3",
+          "IsTemporary": false,
+          "Properties": {},
+          "Url": {
+            "Base": "http://localhost:8080/cozinhas/1",
+            "Queries": []
+          },
+          "Auth": {
+            "Id": null,
+            "ParentId": null,
+            "AuthType": 0,
+            "OAuth2GrantType": 0,
+            "AuthProperties": {}
+          },
+          "Body": {
+            "Id": null,
+            "ParentId": null,
+            "BodyType": 1,
+            "JsonBody": "{\r\n\t\"nome\": \"Baiana\"\r\n}",
+            "FormEncodedData": [],
+            "FormDataList": []
+          },
+          "MockData": {
+            "Body": null,
+            "StatusCode": 200,
+            "ContentType": "application/json"
+          },
+          "Children": [],
+          "Headers": [],
+          "ChainingRules": [],
+          "Type": 1,
+          "Name": "Atualizar Cozinha",
+          "IsExpanded": false,
+          "Method": "PUT",
+          "Response": null
+        },
+        {
+          "LastUsedDate": "2020-10-25T10:30:12.7070788+00:00",
+          "Id": "76abeb23-a231-41c9-a84e-408ebf82e385",
+          "IsTemporary": false,
+          "Properties": {},
+          "Url": {
+            "Base": "http://localhost:8080/cozinhas/1",
+            "Queries": []
+          },
+          "Auth": {
+            "Id": null,
+            "ParentId": null,
+            "AuthType": 0,
+            "OAuth2GrantType": 0,
+            "AuthProperties": {}
+          },
+          "Body": {
+            "Id": null,
+            "ParentId": null,
+            "BodyType": 1,
+            "JsonBody": "{\r\n\t\"nome\": \"Baiana\"\r\n}",
+            "FormEncodedData": [],
+            "FormDataList": []
+          },
+          "MockData": {
+            "Body": null,
+            "StatusCode": 200,
+            "ContentType": "application/json"
+          },
+          "Children": [],
+          "Headers": [],
+          "ChainingRules": [],
+          "Type": 1,
+          "Name": "Atualizar Cozinha",
+          "IsExpanded": false,
+          "Method": "PUT",
+          "Response": null
+        },
+        {
+          "LastUsedDate": "2020-10-25T10:30:55.5412189+00:00",
+          "Id": "975938a7-d9e5-494f-ad2a-738c3040f209",
+          "IsTemporary": false,
+          "Properties": {},
+          "Url": {
+            "Base": "http://localhost:8080/cozinhas/1",
+            "Queries": []
+          },
+          "Auth": {
+            "Id": null,
+            "ParentId": null,
+            "AuthType": 0,
+            "OAuth2GrantType": 0,
+            "AuthProperties": {}
+          },
+          "Body": {
+            "Id": null,
+            "ParentId": null,
+            "BodyType": 1,
+            "JsonBody": "{\r\n\t\"nome\": \"Baiana\"\r\n}",
+            "FormEncodedData": [],
+            "FormDataList": []
+          },
+          "MockData": {
+            "Body": null,
+            "StatusCode": 200,
+            "ContentType": "application/json"
+          },
+          "Children": [],
+          "Headers": [],
+          "ChainingRules": [],
+          "Type": 1,
+          "Name": "Buscar Cozinha",
+          "IsExpanded": false,
+          "Method": "GET",
+          "Response": null
+        },
+        {
+          "LastUsedDate": "2020-10-25T10:31:52.5048994+00:00",
+          "Id": "62ee233a-83a2-4082-97ad-d2cefed66ba0",
+          "IsTemporary": false,
+          "Properties": {},
+          "Url": {
+            "Base": "http://localhost:8080/cozinhas/1",
+            "Queries": []
+          },
+          "Auth": {
+            "Id": null,
+            "ParentId": null,
+            "AuthType": 0,
+            "OAuth2GrantType": 0,
+            "AuthProperties": {}
+          },
+          "Body": {
+            "Id": null,
+            "ParentId": null,
+            "BodyType": 0,
+            "JsonBody": "{\r\n\t\"nome\": \"Baiana\"\r\n}",
+            "FormEncodedData": [],
+            "FormDataList": []
+          },
+          "MockData": {
+            "Body": null,
+            "StatusCode": 200,
+            "ContentType": "application/json"
+          },
+          "Children": [],
+          "Headers": [],
+          "ChainingRules": [],
+          "Type": 1,
+          "Name": "Buscar Cozinha",
+          "IsExpanded": false,
+          "Method": "GET",
+          "Response": null
+        },
+        {
+          "LastUsedDate": "2020-10-25T10:32:20.7775666+00:00",
+          "Id": "5b05179a-5222-4e79-8396-dae424806a20",
+          "IsTemporary": false,
+          "Properties": {},
+          "Url": {
+            "Base": "http://localhost:8080/cozinhas/1",
+            "Queries": []
+          },
+          "Auth": {
+            "Id": null,
+            "ParentId": null,
+            "AuthType": 0,
+            "OAuth2GrantType": 0,
+            "AuthProperties": {}
+          },
+          "Body": {
+            "Id": null,
+            "ParentId": null,
+            "BodyType": 0,
+            "JsonBody": "{\r\n\t\"nome\": \"Baiana\"\r\n}",
+            "FormEncodedData": [],
+            "FormDataList": []
+          },
+          "MockData": {
+            "Body": null,
+            "StatusCode": 200,
+            "ContentType": "application/json"
+          },
+          "Children": [],
+          "Headers": [
+            {
+              "Id": null,
+              "ParentId": null,
+              "Key": "Content-Type",
+              "Value": "application/json",
+              "Enabled": true,
+              "Private": false,
+              "Type": 1
+            }
+          ],
+          "ChainingRules": [],
+          "Type": 1,
+          "Name": "Buscar Cozinha",
+          "IsExpanded": false,
+          "Method": "GET",
+          "Response": null
+        },
+        {
+          "LastUsedDate": "2020-10-25T10:32:49.3756578+00:00",
+          "Id": "37faab31-2677-46d8-9842-7cbabbba009f",
+          "IsTemporary": false,
+          "Properties": {},
+          "Url": {
+            "Base": "http://localhost:8080/cozinhas/1",
+            "Queries": []
+          },
+          "Auth": {
+            "Id": null,
+            "ParentId": null,
+            "AuthType": 0,
+            "OAuth2GrantType": 0,
+            "AuthProperties": {}
+          },
+          "Body": {
+            "Id": null,
+            "ParentId": null,
+            "BodyType": 0,
+            "JsonBody": "{\r\n\t\"nome\": \"Baiana\"\r\n}",
+            "FormEncodedData": [],
+            "FormDataList": []
+          },
+          "MockData": {
+            "Body": null,
+            "StatusCode": 200,
+            "ContentType": "application/json"
+          },
+          "Children": [],
+          "Headers": [
+            {
+              "Id": null,
+              "ParentId": null,
+              "Key": "Response-Type",
+              "Value": "application/json",
+              "Enabled": false,
+              "Private": false,
+              "Type": 1
+            }
+          ],
+          "ChainingRules": [],
+          "Type": 1,
+          "Name": "Buscar Cozinha",
+          "IsExpanded": false,
+          "Method": "GET",
+          "Response": null
+        },
+        {
+          "LastUsedDate": "2020-10-25T10:34:27.8450112+00:00",
+          "Id": "c557bd87-8ba3-4dec-b5de-6e72b308c9f0",
+          "IsTemporary": false,
+          "Properties": {},
+          "Url": {
+            "Base": "http://localhost:8080/cozinhas/1",
+            "Queries": []
+          },
+          "Auth": {
+            "Id": null,
+            "ParentId": null,
+            "AuthType": 0,
+            "OAuth2GrantType": 0,
+            "AuthProperties": {}
+          },
+          "Body": {
+            "Id": null,
+            "ParentId": null,
+            "BodyType": 0,
+            "JsonBody": "{\r\n\t\"nome\": \"Baiana\"\r\n}",
+            "FormEncodedData": [],
+            "FormDataList": []
+          },
+          "MockData": {
+            "Body": null,
+            "StatusCode": 200,
+            "ContentType": "application/json"
+          },
+          "Children": [],
+          "Headers": [
+            {
+              "Id": null,
+              "ParentId": null,
+              "Key": "Response-Type",
+              "Value": "application/json",
+              "Enabled": false,
+              "Private": false,
+              "Type": 1
+            }
+          ],
+          "ChainingRules": [],
+          "Type": 1,
+          "Name": "Buscar Cozinha",
+          "IsExpanded": false,
+          "Method": "GET",
+          "Response": null
+        },
+        {
+          "LastUsedDate": "2020-10-25T10:35:48.9576672+00:00",
+          "Id": "b60bb312-5aac-464a-8a9b-d4c8a4314d1b",
+          "IsTemporary": false,
+          "Properties": {},
+          "Url": {
+            "Base": "http://127.0.0.1:8080/cozinhas/1",
+            "Queries": []
+          },
+          "Auth": {
+            "Id": null,
+            "ParentId": null,
+            "AuthType": 0,
+            "OAuth2GrantType": 0,
+            "AuthProperties": {}
+          },
+          "Body": {
+            "Id": null,
+            "ParentId": null,
+            "BodyType": 0,
+            "JsonBody": "{\r\n\t\"nome\": \"Baiana\"\r\n}",
+            "FormEncodedData": [],
+            "FormDataList": []
+          },
+          "MockData": {
+            "Body": null,
+            "StatusCode": 200,
+            "ContentType": "application/json"
+          },
+          "Children": [],
+          "Headers": [
+            {
+              "Id": null,
+              "ParentId": null,
+              "Key": "Response-Type",
+              "Value": "application/json",
+              "Enabled": false,
+              "Private": false,
+              "Type": 1
+            }
+          ],
+          "ChainingRules": [],
+          "Type": 1,
+          "Name": "Buscar Cozinha",
+          "IsExpanded": false,
+          "Method": "GET",
+          "Response": null
+        },
+        {
+          "LastUsedDate": "2020-10-25T10:39:37.7126935+00:00",
+          "Id": "55123ec8-4d41-4cad-9e4c-a3488d427263",
+          "IsTemporary": false,
+          "Properties": {},
+          "Url": {
+            "Base": "http://127.0.0.1:8080/cozinhas/1",
+            "Queries": []
+          },
+          "Auth": {
+            "Id": null,
+            "ParentId": null,
+            "AuthType": 0,
+            "OAuth2GrantType": 0,
+            "AuthProperties": {}
+          },
+          "Body": {
+            "Id": null,
+            "ParentId": null,
+            "BodyType": 0,
+            "JsonBody": "{\r\n\t\"nome\": \"Baiana\"\r\n}",
+            "FormEncodedData": [],
+            "FormDataList": []
+          },
+          "MockData": {
+            "Body": null,
+            "StatusCode": 200,
+            "ContentType": "application/json"
+          },
+          "Children": [],
+          "Headers": [
+            {
+              "Id": null,
+              "ParentId": null,
+              "Key": "Response-Type",
+              "Value": "application/json",
+              "Enabled": false,
+              "Private": false,
+              "Type": 1
+            }
+          ],
+          "ChainingRules": [],
+          "Type": 1,
+          "Name": "Buscar Cozinha",
+          "IsExpanded": false,
+          "Method": "GET",
+          "Response": null
+        }
+      ],
+      "Environments": [
+        {
+          "Id": null,
+          "ParentId": null,
+          "Name": "Base environment",
+          "Icon": "🌍",
+          "EnvironmentType": 1,
+          "IsActive": true,
+          "Variables": []
+        }
+      ],
+      "WorkspaceCookies": []
+    }
+  ],
+  "Requests": [],
+  "HistoryRequests": [],
+  "Collections": [],
+  "HistoryCollections": [],
+  "RequestBodies": [],
+  "Environments": [],
+  "ApiTests": [],
+  "Authentications": [],
+  "Parameters": [],
+  "RecentUrls": []
+}
