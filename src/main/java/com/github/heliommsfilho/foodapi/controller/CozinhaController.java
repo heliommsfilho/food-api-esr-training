@@ -5,10 +5,8 @@ import com.github.heliommsfilho.foodapi.domain.exception.EntidadeNãoEncontradaE
 import com.github.heliommsfilho.foodapi.domain.model.Cozinha;
 import com.github.heliommsfilho.foodapi.domain.repository.CozinhaRepository;
 import com.github.heliommsfilho.foodapi.domain.service.CadastroCozinhaService;
-import com.github.heliommsfilho.foodapi.model.CozinhasXMLWrapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -35,11 +33,6 @@ public class CozinhaController {
         return cozinhaRepository.listar();
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_XML_VALUE)
-    public CozinhasXMLWrapper listarXml() {
-        return new CozinhasXMLWrapper(cozinhaRepository.listar());
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<Cozinha> buscar(@PathVariable Long id) {
         Optional<Cozinha> cozinha = cozinhaRepository.buscar(id);
@@ -60,7 +53,7 @@ public class CozinhaController {
         if (cozinhaAtual.isPresent()) {
             Cozinha cozinhaAtualizar = cozinhaAtual.get();
             BeanUtils.copyProperties(cozinha, cozinhaAtualizar, "id");
-            cozinhaRepository.salvar(cozinhaAtualizar);
+            cadastroCozinha.salvar(cozinhaAtualizar);
 
             return ResponseEntity.ok(cozinhaAtualizar);
         }

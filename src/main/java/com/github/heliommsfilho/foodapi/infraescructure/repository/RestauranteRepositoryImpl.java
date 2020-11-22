@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class RestauranteRepositoryImpl implements RestauranteRepository {
@@ -16,14 +17,14 @@ public class RestauranteRepositoryImpl implements RestauranteRepository {
     private EntityManager manager;
 
     @Override
-    public List<Restaurante> todas() {
+    public List<Restaurante> todos() {
         return manager.createQuery("from Restaurante", Restaurante.class)
                 .getResultList();
     }
 
     @Override
-    public Restaurante buscar(Long id) {
-        return manager.find(Restaurante.class, id);
+    public Optional<Restaurante> buscar(Long id) {
+        return Optional.ofNullable(manager.find(Restaurante.class, id));
     }
 
     @Transactional
@@ -35,8 +36,8 @@ public class RestauranteRepositoryImpl implements RestauranteRepository {
     @Transactional
     @Override
     public void remover(Restaurante restaurante) {
-        restaurante = buscar(restaurante.getId());
-        manager.remove(restaurante);
+        Optional<Restaurante> restauranteOptional = buscar(restaurante.getId());
+        restauranteOptional.ifPresent(r ->manager.remove(r));
     }
 
 }
