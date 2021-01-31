@@ -8,7 +8,9 @@ import java.util.Optional;
 public interface CozinhaRepository {
 
     List<Cozinha> listar();
+    List<Cozinha> consultarPorNome(String nome);
     Optional<Cozinha> buscar(Long id);
+
     Cozinha salvar(Cozinha cozinha);
     void remover(Long id);
 }

@@ -98,8 +98,6 @@ public class RestauranteController {
 
                 Object novoValor = ReflectionUtils.getField(field.get(), restauranteOrigem);
                 ReflectionUtils.setField(field.get(), restauranteDestino, novoValor);
-
-
             }
         });
     }
