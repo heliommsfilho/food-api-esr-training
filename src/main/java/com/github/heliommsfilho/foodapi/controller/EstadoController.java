@@ -30,18 +30,18 @@ public class EstadoController {
 
     @GetMapping
     private List<Estado> listar() {
-        return estadoRepository.listar();
+        return estadoRepository.findAll();
     }
 
     @GetMapping("/{id}")
     private ResponseEntity<Estado> buscar(@PathVariable Long id) {
-        Optional<Estado> estadoOptional = estadoRepository.buscar(id);
+        Optional<Estado> estadoOptional = estadoRepository.findById(id);
         return estadoOptional.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
     private ResponseEntity<Estado> salvar(@RequestBody Estado estado) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(estadoRepository.salvar(estado));
+        return ResponseEntity.status(HttpStatus.CREATED).body(estadoRepository.save(estado));
     }
 
     @DeleteMapping("/{id}")
@@ -58,7 +58,7 @@ public class EstadoController {
 
     @PutMapping("/{id}")
     private ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody Estado estado) {
-        Optional<Estado> estadoOptional = estadoRepository.buscar(id);
+        Optional<Estado> estadoOptional = estadoRepository.findById(id);
 
         if (estadoOptional.isEmpty()) {
             return ResponseEntity.notFound().build();

@@ -27,16 +27,16 @@ public class CadastroCidadeService {
 
     public Cidade salvar(Cidade cidade) {
         Long estadoId = cidade.getEstado().getId();
-        Optional<Estado> estado =estadoRepository.buscar(estadoId);
+        Optional<Estado> estado =estadoRepository.findById(estadoId);
         estado.orElseThrow(() -> new EntidadeNaoEncontradaException(String.format("Não existe Estado cadastrado com o código %d", estadoId)));
         cidade.setEstado(estado.get());
 
-        return cidadeRepository.salvar(cidade);
+        return cidadeRepository.save(cidade);
     }
 
     public void excluir(Long id) {
         try {
-            cidadeRepository.remover(id);
+            cidadeRepository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(String.format("Estado de código %d não pode ser removido, pois está em uso", id));
         } catch (EmptyResultDataAccessException e) {

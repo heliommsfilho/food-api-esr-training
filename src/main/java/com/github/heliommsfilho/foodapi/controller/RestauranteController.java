@@ -33,12 +33,12 @@ public class RestauranteController {
 
     @GetMapping
     public ResponseEntity<List<Restaurante>> listar() {
-        return ResponseEntity.ok(restauranteRepository.todos());
+        return ResponseEntity.ok(restauranteRepository.findAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Restaurante> buscar(@PathVariable Long id) {
-        Optional<Restaurante> restauranteOptional = restauranteRepository.buscar(id);
+        Optional<Restaurante> restauranteOptional = restauranteRepository.findById(id);
         return restauranteOptional.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
@@ -54,7 +54,7 @@ public class RestauranteController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody Restaurante restaurante) {
-        Optional<Restaurante> restauranteOptional = restauranteRepository.buscar(id);
+        Optional<Restaurante> restauranteOptional = restauranteRepository.findById(id);
 
         if (restauranteOptional.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -73,7 +73,7 @@ public class RestauranteController {
 
     @PatchMapping("/{restauranteId}")
     public ResponseEntity<?> atualizarParcial(@PathVariable Long restauranteId, @RequestBody Map<String, Object> campos) {
-        Optional<Restaurante> restauranteAtual = restauranteRepository.buscar(restauranteId);
+        Optional<Restaurante> restauranteAtual = restauranteRepository.findById(restauranteId);
 
         if (restauranteAtual.isEmpty()) {
             return ResponseEntity.notFound().build();

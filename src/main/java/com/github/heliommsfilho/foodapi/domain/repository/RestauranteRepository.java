@@ -1,14 +1,10 @@
 package com.github.heliommsfilho.foodapi.domain.repository;
 
 import com.github.heliommsfilho.foodapi.domain.model.Restaurante;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
+@Repository
+public interface RestauranteRepository extends JpaRepository<Restaurante, Long> {
 
-public interface RestauranteRepository {
-
-    List<Restaurante> todos();
-    Optional<Restaurante> buscar(Long id);
-    Restaurante salvar(Restaurante restaurante);
-    void remover(Restaurante restaurante);
 }

@@ -30,12 +30,12 @@ public class CidadeController {
 
     @GetMapping
     private List<Cidade> listar() {
-        return cidadeRepository.listar();
+        return cidadeRepository.findAll();
     }
 
     @GetMapping("/{id}")
     private ResponseEntity<Cidade> buscar(@PathVariable Long id) {
-        Optional<Cidade> cidadeOptional = cidadeRepository.buscar(id);
+        Optional<Cidade> cidadeOptional = cidadeRepository.findById(id);
         return cidadeOptional.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
@@ -63,7 +63,7 @@ public class CidadeController {
 
     @PutMapping("/{id}")
     private ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody Cidade cidade) {
-        Optional<Cidade> cidadeOptional = cidadeRepository.buscar(id);
+        Optional<Cidade> cidadeOptional = cidadeRepository.findById(id);
 
         if (cidadeOptional.isEmpty()) {
             return ResponseEntity.notFound().build();
