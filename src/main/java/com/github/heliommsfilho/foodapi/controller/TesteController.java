@@ -21,8 +21,8 @@ public class TesteController {
         this.cozinhaRepository = cozinhaRepository;
     }
 
-    @GetMapping("/cozinhas/por-nome")
+/*    @GetMapping("/cozinhas/por-nome")
     public List<Cozinha> cozinhasPorNome(@RequestParam String nome) {
         return cozinhaRepository.consultarPorNome(nome);
-    }
+    }*/
 }
