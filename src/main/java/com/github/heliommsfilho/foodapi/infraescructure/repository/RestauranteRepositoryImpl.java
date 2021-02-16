@@ -1,24 +1,37 @@
 package com.github.heliommsfilho.foodapi.infraescructure.repository;
 
 import com.github.heliommsfilho.foodapi.domain.model.Restaurante;
+import com.github.heliommsfilho.foodapi.domain.repository.RestauranteRepository;
 import com.github.heliommsfilho.foodapi.domain.repository.RestauranteRepositoryQueries;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import static com.github.heliommsfilho.foodapi.infraescructure.repository.RestauranteSpecs.comFreteGratis;
+import static com.github.heliommsfilho.foodapi.infraescructure.repository.RestauranteSpecs.comNomeSemelhante;
 
 @Repository
 public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    private final RestauranteRepository restauranteRepository;
+
+    @Autowired
+    public RestauranteRepositoryImpl(RestauranteRepository restauranteRepository) {
+        this.restauranteRepository = restauranteRepository;
+    }
 
     @Override
     public List<Restaurante> find(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal) {
@@ -31,6 +44,11 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
         var typedQuery = entityManager.createQuery(criteriaQuery);
 
         return typedQuery.getResultList();
+    }
+
+    @Override
+    public List<Restaurante> findComFreteGratis(String nome) {
+        return restauranteRepository.findAll(comFreteGratis().and(comNomeSemelhante(nome)));
     }
 
     private Predicate[] criarRestricoes(CriteriaBuilder builder, Root<Restaurante> root, String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal) {

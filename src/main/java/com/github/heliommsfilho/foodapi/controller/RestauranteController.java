@@ -47,7 +47,7 @@ public class RestauranteController {
 
     @GetMapping("/frete-gratis")
     public ResponseEntity<List<Restaurante>> freteGratis(String nome) {
-        return ResponseEntity.ok(restauranteRepository.findAll(comFreteGratis().and(comNomeSemelhante(nome))));
+        return ResponseEntity.ok(restauranteRepository.findComFreteGratis(nome));
     }
 
     @GetMapping("/{id}")
