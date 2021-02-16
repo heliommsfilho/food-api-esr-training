@@ -18,9 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.github.heliommsfilho.foodapi.infraescructure.repository.RestauranteSpecs.comFreteGratis;
-import static com.github.heliommsfilho.foodapi.infraescructure.repository.RestauranteSpecs.comNomeSemelhante;
-
 @RestController
 @RequestMapping("/restaurantes")
 public class RestauranteController {
@@ -48,6 +45,11 @@ public class RestauranteController {
     @GetMapping("/frete-gratis")
     public ResponseEntity<List<Restaurante>> freteGratis(String nome) {
         return ResponseEntity.ok(restauranteRepository.findComFreteGratis(nome));
+    }
+
+    @GetMapping("/primeiro")
+    public ResponseEntity<Restaurante> buscarPrimeiro() {
+        return restauranteRepository.buscarPrimeiro().map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/{id}")

@@ -4,6 +4,7 @@ import com.github.heliommsfilho.foodapi.domain.model.Restaurante;
 import com.github.heliommsfilho.foodapi.domain.repository.RestauranteRepository;
 import com.github.heliommsfilho.foodapi.domain.repository.RestauranteRepositoryQueries;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -28,7 +29,7 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
 
     private final RestauranteRepository restauranteRepository;
 
-    @Autowired
+    @Autowired @Lazy
     public RestauranteRepositoryImpl(RestauranteRepository restauranteRepository) {
         this.restauranteRepository = restauranteRepository;
     }
