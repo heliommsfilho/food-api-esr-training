@@ -5,8 +5,6 @@ import com.github.heliommsfilho.foodapi.domain.exception.EntidadeNaoEncontradaEx
 import com.github.heliommsfilho.foodapi.domain.model.Restaurante;
 import com.github.heliommsfilho.foodapi.domain.repository.RestauranteRepository;
 import com.github.heliommsfilho.foodapi.domain.service.CadastroRestauranteService;
-import com.github.heliommsfilho.foodapi.infraescructure.repository.spec.restaurante.RestauranteComFreteGratisSpec;
-import com.github.heliommsfilho.foodapi.infraescructure.repository.spec.restaurante.RestauranteComNomeSemelhanteSpec;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +17,9 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import static com.github.heliommsfilho.foodapi.infraescructure.repository.RestauranteSpecs.comFreteGratis;
+import static com.github.heliommsfilho.foodapi.infraescructure.repository.RestauranteSpecs.comNomeSemelhante;
 
 @RestController
 @RequestMapping("/restaurantes")
@@ -46,8 +47,7 @@ public class RestauranteController {
 
     @GetMapping("/frete-gratis")
     public ResponseEntity<List<Restaurante>> freteGratis(String nome) {
-        return ResponseEntity.ok(restauranteRepository.findAll(new RestauranteComFreteGratisSpec()
-                                                                    .and(new RestauranteComNomeSemelhanteSpec(nome))));
+        return ResponseEntity.ok(restauranteRepository.findAll(comFreteGratis().and(comNomeSemelhante(nome))));
     }
 
     @GetMapping("/{id}")
