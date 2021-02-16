@@ -5,6 +5,8 @@ import com.github.heliommsfilho.foodapi.domain.exception.EntidadeNaoEncontradaEx
 import com.github.heliommsfilho.foodapi.domain.model.Restaurante;
 import com.github.heliommsfilho.foodapi.domain.repository.RestauranteRepository;
 import com.github.heliommsfilho.foodapi.domain.service.CadastroRestauranteService;
+import com.github.heliommsfilho.foodapi.infraescructure.repository.spec.restaurante.RestauranteComFreteGratisSpec;
+import com.github.heliommsfilho.foodapi.infraescructure.repository.spec.restaurante.RestauranteComNomeSemelhanteSpec;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +15,7 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -36,9 +39,15 @@ public class RestauranteController {
         return ResponseEntity.ok(restauranteRepository.findAll());
     }
 
-    @GetMapping("/por-nome")
-    public ResponseEntity<List<Restaurante>> porNome(String nome, Long cozinhaId) {
-        return ResponseEntity.ok(restauranteRepository.consultarPorNome(nome, cozinhaId));
+    @GetMapping("/por-taxa-frete")
+    public ResponseEntity<List<Restaurante>> porNomeTaxaFrete(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal) {
+        return ResponseEntity.ok(restauranteRepository.find(nome, taxaFreteInicial, taxaFreteFinal));
+    }
+
+    @GetMapping("/frete-gratis")
+    public ResponseEntity<List<Restaurante>> freteGratis(String nome) {
+        return ResponseEntity.ok(restauranteRepository.findAll(new RestauranteComFreteGratisSpec()
+                                                                    .and(new RestauranteComNomeSemelhanteSpec(nome))));
     }
 
     @GetMapping("/{id}")
