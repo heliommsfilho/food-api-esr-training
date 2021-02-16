@@ -36,6 +36,11 @@ public class RestauranteController {
         return ResponseEntity.ok(restauranteRepository.findAll());
     }
 
+    @GetMapping("/por-nome")
+    public ResponseEntity<List<Restaurante>> porNome(String nome, Long cozinhaId) {
+        return ResponseEntity.ok(restauranteRepository.consultarPorNome(nome, cozinhaId));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Restaurante> buscar(@PathVariable Long id) {
         Optional<Restaurante> restauranteOptional = restauranteRepository.findById(id);
