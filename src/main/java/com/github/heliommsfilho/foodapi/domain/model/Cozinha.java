@@ -16,8 +16,6 @@ public class Cozinha {
     @EqualsAndHashCode.Include
     private Long id;
 
-    //@JsonIgnore
-    //@JsonProperty(value = "titulo")
     @Column(name = "nome")
     private String nome;
 }
