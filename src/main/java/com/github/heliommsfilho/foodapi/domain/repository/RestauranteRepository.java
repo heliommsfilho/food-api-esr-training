@@ -5,6 +5,7 @@ import com.github.heliommsfilho.foodapi.infraescructure.repository.CustomJPARepo
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -15,7 +16,8 @@ import java.util.List;
 public interface RestauranteRepository extends CustomJPARepository<Restaurante, Long>, RestauranteRepositoryQueries,
                                                JpaSpecificationExecutor<Restaurante> {
 
+    @Query("from Restaurante r join r.cozinha left join fetch r.formasPagamento")
+    List<Restaurante> findAll();
     List<Restaurante> findByTaxaFreteBetween(BigDecimal taxaInicial, BigDecimal taxaFinal);
     List<Restaurante> findByNomeContainingAndCozinhaId(String nome, Long cozinha);
-    List<Restaurante> consultarPorNome(String nome, @Param("id") Long cozinha);
 }
