@@ -42,7 +42,7 @@ public class Restaurante {
     @JsonIgnore
     @Column(nullable = false)
     @CreationTimestamp
-    private LocalDateTime dataCadastro ;
+    private LocalDateTime dataCadastro;
 
     @JsonIgnore
     @Column(nullable = false)
