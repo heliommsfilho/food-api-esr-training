@@ -2,6 +2,7 @@ package com.github.heliommsfilho.foodapi.controller;
 
 import com.github.heliommsfilho.foodapi.domain.exception.EntidadeEmUsoException;
 import com.github.heliommsfilho.foodapi.domain.exception.EntidadeNaoEncontradaException;
+import com.github.heliommsfilho.foodapi.domain.exception.NegocioException;
 import com.github.heliommsfilho.foodapi.domain.model.Cidade;
 import com.github.heliommsfilho.foodapi.domain.repository.CidadeRepository;
 import com.github.heliommsfilho.foodapi.domain.service.CadastroCidadeService;
@@ -29,23 +30,22 @@ public class CidadeController {
     }
 
     @GetMapping
-    private List<Cidade> listar() {
+    public List<Cidade> listar() {
         return cidadeRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    private ResponseEntity<Cidade> buscar(@PathVariable Long id) {
-        Optional<Cidade> cidadeOptional = cidadeRepository.findById(id);
-        return cidadeOptional.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    public Cidade buscar(@PathVariable Long id) {
+        return cadastroCidadeService.buscarOuFalhar(id);
     }
 
     @PostMapping
-    private ResponseEntity<?> salvar(@RequestBody Cidade cidade) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public Cidade salvar(@RequestBody Cidade cidade) {
         try {
-            Cidade cidadeSalva = cadastroCidadeService.salvar(cidade);
-            return ResponseEntity.status(HttpStatus.CREATED).body(cidadeSalva);
+            return cadastroCidadeService.salvar(cidade);
         } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            throw new NegocioException(e.getMessage());
         }
     }
 
@@ -62,21 +62,14 @@ public class CidadeController {
     }
 
     @PutMapping("/{id}")
-    private ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody Cidade cidade) {
-        Optional<Cidade> cidadeOptional = cidadeRepository.findById(id);
-
-        if (cidadeOptional.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        Cidade cidadeAtual = cidadeOptional.get();
+    public Cidade atualizar(@PathVariable Long id, @RequestBody Cidade cidade) {
+        Cidade cidadeAtual = cadastroCidadeService.buscarOuFalhar(id);
         BeanUtils.copyProperties(cidade, cidadeAtual, "id");
 
         try {
-            Cidade cidadeAtualizada = cadastroCidadeService.salvar(cidadeAtual);
-            return ResponseEntity.ok(cidadeAtualizada);
+            return cadastroCidadeService.salvar(cidadeAtual);
         } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            throw new NegocioException(e.getMessage());
         }
     }
 }
