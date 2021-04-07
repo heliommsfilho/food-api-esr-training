@@ -2,6 +2,7 @@ package com.github.heliommsfilho.foodapi.domain.service;
 
 import com.github.heliommsfilho.foodapi.domain.exception.EntidadeEmUsoException;
 import com.github.heliommsfilho.foodapi.domain.exception.EntidadeNaoEncontradaException;
+import com.github.heliommsfilho.foodapi.domain.exception.EstadoNaoEncontradoException;
 import com.github.heliommsfilho.foodapi.domain.model.Estado;
 import com.github.heliommsfilho.foodapi.domain.repository.EstadoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class CadastroEstadoService {
 
-    public static final String MSG_ESTADO_NAO_ENCONTRADA = "Não existe um cadastro de Estado com código %d";
     public static final String MSG_ESTADO_EM_USO = "Estado de código %d não pode ser removido, pois está em uso";
 
     private final EstadoRepository estadoRepository;
@@ -37,7 +37,6 @@ public class CadastroEstadoService {
     }
 
     public Estado buscarOuFalhar(Long id) {
-        return estadoRepository.findById(id)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException(String.format(MSG_ESTADO_NAO_ENCONTRADA, id)));
+        return estadoRepository.findById(id).orElseThrow(() -> new EstadoNaoEncontradoException(id));
     }
 }
