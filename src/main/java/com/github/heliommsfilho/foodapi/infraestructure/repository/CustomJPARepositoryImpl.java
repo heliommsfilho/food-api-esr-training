@@ -1,4 +1,4 @@
-package com.github.heliommsfilho.foodapi.infraescructure.repository;
+package com.github.heliommsfilho.foodapi.infraestructure.repository;
 
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;

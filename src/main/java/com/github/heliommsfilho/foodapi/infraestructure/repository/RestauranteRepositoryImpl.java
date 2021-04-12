@@ -1,4 +1,4 @@
-package com.github.heliommsfilho.foodapi.infraescructure.repository;
+package com.github.heliommsfilho.foodapi.infraestructure.repository;
 
 import com.github.heliommsfilho.foodapi.domain.model.Restaurante;
 import com.github.heliommsfilho.foodapi.domain.repository.RestauranteRepository;
@@ -18,8 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.github.heliommsfilho.foodapi.infraescructure.repository.RestauranteSpecs.comFreteGratis;
-import static com.github.heliommsfilho.foodapi.infraescructure.repository.RestauranteSpecs.comNomeSemelhante;
+import static com.github.heliommsfilho.foodapi.infraestructure.repository.RestauranteSpecs.comFreteGratis;
+import static com.github.heliommsfilho.foodapi.infraestructure.repository.RestauranteSpecs.comNomeSemelhante;
 
 @Repository
 public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {

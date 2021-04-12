@@ -1,12 +1,9 @@
 package com.github.heliommsfilho.foodapi.domain.repository;
 
 import com.github.heliommsfilho.foodapi.domain.model.Restaurante;
-import com.github.heliommsfilho.foodapi.infraescructure.repository.CustomJPARepository;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.github.heliommsfilho.foodapi.infraestructure.repository.CustomJPARepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;

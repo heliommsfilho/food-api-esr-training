@@ -1,7 +1,6 @@
 package com.github.heliommsfilho.foodapi.domain.service;
 
 import com.github.heliommsfilho.foodapi.domain.exception.EntidadeEmUsoException;
-import com.github.heliommsfilho.foodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.github.heliommsfilho.foodapi.domain.exception.EstadoNaoEncontradoException;
 import com.github.heliommsfilho.foodapi.domain.model.Estado;
 import com.github.heliommsfilho.foodapi.domain.repository.EstadoRepository;
@@ -32,7 +31,7 @@ public class CadastroEstadoService {
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(String.format(MSG_ESTADO_EM_USO, id));
         } catch (EmptyResultDataAccessException e) {
-            throw new EntidadeNaoEncontradaException(String.format("Estado de código %d não pôde ser encontrado", id));
+            throw new EstadoNaoEncontradoException(id);
         }
     }
 
