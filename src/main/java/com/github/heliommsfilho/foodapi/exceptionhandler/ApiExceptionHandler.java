@@ -1,17 +1,22 @@
 package com.github.heliommsfilho.foodapi.exceptionhandler;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.github.heliommsfilho.foodapi.domain.exception.EntidadeEmUsoException;
 import com.github.heliommsfilho.foodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.github.heliommsfilho.foodapi.domain.exception.NegocioException;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
@@ -35,6 +40,31 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         Rfc7807 problem = createProblemBuilder(HttpStatus.CONFLICT, ProblemType.ENTIDADE_EM_USO, e.getMessage()).build();
 
         return handleExceptionInternal(e, problem, new HttpHeaders(), HttpStatus.CONFLICT, webRequest);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        Throwable rootCause = ExceptionUtils.getRootCause(ex);
+
+        if (rootCause instanceof InvalidFormatException) {
+            return handleInvalidFormatException((InvalidFormatException) rootCause, headers, status, request);
+        }
+
+        String detail = "Corpo de requisição inválido. Verifique a sintaxe da requisição.";
+        Rfc7807 problem = createProblemBuilder(status, ProblemType.MENSAGEM_INVALIDA, detail).build();
+
+        return super.handleExceptionInternal(ex, problem, headers, status, request);
+    }
+
+    private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        String propertyPath = ex.getPath().stream().map(JsonMappingException.Reference::getFieldName)
+                                                   .collect(Collectors.joining("."));
+
+        String detail = String.format("A propriedade '%s' recebeu o valor '%s' que é de um tipo incompatível. Informe um valor compatível com o tipo '%s'",
+                                      propertyPath, ex.getValue(), ex.getTargetType().getSimpleName());
+        Rfc7807 problem = createProblemBuilder(status, ProblemType.MENSAGEM_INVALIDA, detail).build();
+
+        return handleExceptionInternal(ex, problem, headers, status, request);
     }
 
     @Override
