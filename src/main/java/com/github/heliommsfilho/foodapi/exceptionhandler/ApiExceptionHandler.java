@@ -1,7 +1,9 @@
 package com.github.heliommsfilho.foodapi.exceptionhandler;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.exc.IgnoredPropertyException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.github.heliommsfilho.foodapi.domain.exception.EntidadeEmUsoException;
 import com.github.heliommsfilho.foodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.github.heliommsfilho.foodapi.domain.exception.NegocioException;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -50,18 +53,27 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
             return handleInvalidFormatException((InvalidFormatException) rootCause, headers, status, request);
         }
 
+        if (rootCause instanceof UnrecognizedPropertyException) {
+            return handleUnrecognizedPropertyException((UnrecognizedPropertyException) rootCause, headers, status, request);
+        }
+
         String detail = "Corpo de requisição inválido. Verifique a sintaxe da requisição.";
         Rfc7807 problem = createProblemBuilder(status, ProblemType.MENSAGEM_INVALIDA, detail).build();
 
         return super.handleExceptionInternal(ex, problem, headers, status, request);
     }
 
-    private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        String propertyPath = ex.getPath().stream().map(JsonMappingException.Reference::getFieldName)
-                                                   .collect(Collectors.joining("."));
+    private ResponseEntity<Object> handleUnrecognizedPropertyException(UnrecognizedPropertyException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        String detail = String.format("Requisição inválida. A propriedade '%s' não existe.", referenceToStringPath(ex.getPath()));
+        Rfc7807 problem = createProblemBuilder(status, ProblemType.MENSAGEM_INVALIDA, detail).build();
 
+        return handleExceptionInternal(ex, problem, headers, status, request);
+    }
+
+    private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         String detail = String.format("A propriedade '%s' recebeu o valor '%s' que é de um tipo incompatível. Informe um valor compatível com o tipo '%s'",
-                                      propertyPath, ex.getValue(), ex.getTargetType().getSimpleName());
+                                      referenceToStringPath(ex.getPath()), ex.getValue(), ex.getTargetType().getSimpleName());
+
         Rfc7807 problem = createProblemBuilder(status, ProblemType.MENSAGEM_INVALIDA, detail).build();
 
         return handleExceptionInternal(ex, problem, headers, status, request);
@@ -91,5 +103,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .type(problemType.getPath())
                 .title(problemType.getTitle())
                 .detail(detail);
+    }
+
+    private static String referenceToStringPath(List<JsonMappingException.Reference> referenceList) {
+        return referenceList.stream().map(JsonMappingException.Reference::getFieldName).collect(Collectors.joining("."));
     }
 }
