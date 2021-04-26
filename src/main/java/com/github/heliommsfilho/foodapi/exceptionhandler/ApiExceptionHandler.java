@@ -1,8 +1,8 @@
 package com.github.heliommsfilho.foodapi.exceptionhandler;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.exc.IgnoredPropertyException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.github.heliommsfilho.foodapi.domain.exception.EntidadeEmUsoException;
 import com.github.heliommsfilho.foodapi.domain.exception.EntidadeNaoEncontradaException;
@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -26,23 +28,36 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
+    private final String MSG_ERRO_INTERNO_SERVIDOR = "Erro interno do servidor. Caso o problema persista, contacte o administrador do sistema";
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleNotCaughtException(Exception ex, WebRequest request) {
+        Rfc7807 problem = createProblemBuilder(HttpStatus.INTERNAL_SERVER_ERROR, ProblemType.ERRO_INTERNO_SERVIDOR, MSG_ERRO_INTERNO_SERVIDOR)
+                            .userMessage(MSG_ERRO_INTERNO_SERVIDOR).build();
+
+        return handleExceptionInternal(ex, problem, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
+    }
+
     @ExceptionHandler(EntidadeNaoEncontradaException.class)
     public ResponseEntity<?> handleEntidadeNaoEncontradaException(EntidadeNaoEncontradaException e, WebRequest webRequest) {
-        Rfc7807 problem = createProblemBuilder(HttpStatus.NOT_FOUND, ProblemType.ENTIDADE_NAO_ENCONTRADA, e.getMessage()).build();
+        Rfc7807 problem = createProblemBuilder(HttpStatus.NOT_FOUND, ProblemType.RECURSO_NAO_ENCONTRADO, e.getMessage())
+                            .userMessage(MSG_ERRO_INTERNO_SERVIDOR).build();
 
         return handleExceptionInternal(e, problem, new HttpHeaders(), HttpStatus.NOT_FOUND, webRequest);
     }
 
     @ExceptionHandler(NegocioException.class)
     public ResponseEntity<?> handleNegocioException(NegocioException e, WebRequest webRequest) {
-        Rfc7807 problem = createProblemBuilder(HttpStatus.BAD_REQUEST, ProblemType.ERRO_NEGOCIO, e.getMessage()).build();
+        Rfc7807 problem = createProblemBuilder(HttpStatus.BAD_REQUEST, ProblemType.ERRO_NEGOCIO, e.getMessage())
+                            .userMessage(e.getMessage()).build();
 
         return handleExceptionInternal(e, problem, new HttpHeaders(), HttpStatus.BAD_REQUEST, webRequest);
     }
 
     @ExceptionHandler(EntidadeEmUsoException.class)
     public ResponseEntity<?> handleEntidadeEmUsoException(EntidadeEmUsoException e, WebRequest webRequest) {
-        Rfc7807 problem = createProblemBuilder(HttpStatus.CONFLICT, ProblemType.ENTIDADE_EM_USO, e.getMessage()).build();
+        Rfc7807 problem = createProblemBuilder(HttpStatus.CONFLICT, ProblemType.ENTIDADE_EM_USO, e.getMessage())
+                            .userMessage(e.getMessage()).build();
 
         return handleExceptionInternal(e, problem, new HttpHeaders(), HttpStatus.CONFLICT, webRequest);
     }
@@ -55,15 +70,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         }
 
         return super.handleTypeMismatch(ex, headers, status, request);
-    }
-
-    private  ResponseEntity<Object> handlerMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        String requiredType = Objects.nonNull(ex.getRequiredType()) ? ex.getRequiredType().getSimpleName() : "Unknown Type";
-        String detail = String.format("O parâmetro de URL '%s' recebeu o valor inváliod '%s'. Informe um valor compatível com o tilo '%s'",
-                                      ex.getName(), ex.getValue(), requiredType);
-
-        Rfc7807 problem = createProblemBuilder(status, ProblemType.PARAMETRO_INVALIDO, detail).build();
-        return handleExceptionInternal(ex, problem, headers, status, request);
     }
 
     @Override
@@ -79,14 +85,33 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         }
 
         String detail = "Corpo de requisição inválido. Verifique a sintaxe da requisição.";
-        Rfc7807 problem = createProblemBuilder(status, ProblemType.MENSAGEM_INVALIDA, detail).build();
+        Rfc7807 problem = createProblemBuilder(status, ProblemType.MENSAGEM_INVALIDA, detail)
+                            .userMessage(MSG_ERRO_INTERNO_SERVIDOR).build();
 
         return super.handleExceptionInternal(ex, problem, headers, status, request);
     }
 
-    private ResponseEntity<Object> handleUnrecognizedPropertyException(UnrecognizedPropertyException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    @Override
+    protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        String detail = String.format("O recurso '%s' não existe", ex.getRequestURL());
+        Rfc7807 problem = createProblemBuilder(status, ProblemType.RECURSO_NAO_ENCONTRADO, detail)
+                            .userMessage(MSG_ERRO_INTERNO_SERVIDOR).build();
+
+        return super.handleExceptionInternal(ex, problem, headers, status, request);
+    }
+
+    private  ResponseEntity<Object> handlerMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        String requiredType = Objects.nonNull(ex.getRequiredType()) ? ex.getRequiredType().getSimpleName() : "Unknown Type";
+        String detail = String.format("O parâmetro de URL '%s' recebeu o valor inváliod '%s'. Informe um valor compatível com o tipo '%s'",
+                                      ex.getName(), ex.getValue(), requiredType);
+
+        Rfc7807 problem = createProblemBuilder(status, ProblemType.PARAMETRO_INVALIDO, detail).userMessage(MSG_ERRO_INTERNO_SERVIDOR).build();
+        return handleExceptionInternal(ex, problem, headers, status, request);
+    }
+
+    private ResponseEntity<Object> handleUnrecognizedPropertyException(PropertyBindingException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         String detail = String.format("Requisição inválida. A propriedade '%s' não existe.", referenceToStringPath(ex.getPath()));
-        Rfc7807 problem = createProblemBuilder(status, ProblemType.MENSAGEM_INVALIDA, detail).build();
+        Rfc7807 problem = createProblemBuilder(status, ProblemType.MENSAGEM_INVALIDA, detail).userMessage(MSG_ERRO_INTERNO_SERVIDOR).build();
 
         return handleExceptionInternal(ex, problem, headers, status, request);
     }
@@ -95,7 +120,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         String detail = String.format("A propriedade '%s' recebeu o valor '%s' que é de um tipo incompatível. Informe um valor compatível com o tipo '%s'",
                                       referenceToStringPath(ex.getPath()), ex.getValue(), ex.getTargetType().getSimpleName());
 
-        Rfc7807 problem = createProblemBuilder(status, ProblemType.MENSAGEM_INVALIDA, detail).build();
+        Rfc7807 problem = createProblemBuilder(status, ProblemType.MENSAGEM_INVALIDA, detail).userMessage(MSG_ERRO_INTERNO_SERVIDOR).build();
 
         return handleExceptionInternal(ex, problem, headers, status, request);
     }
@@ -123,7 +148,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .status(httpStatus.value())
                 .type(problemType.getPath())
                 .title(problemType.getTitle())
-                .detail(detail);
+                .detail(detail)
+                .timestamp(LocalDateTime.now());
     }
 
     private static String referenceToStringPath(List<JsonMappingException.Reference> referenceList) {
