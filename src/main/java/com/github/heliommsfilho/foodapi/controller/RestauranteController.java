@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.List;
@@ -73,7 +74,7 @@ public class RestauranteController {
     }
 
     @PostMapping
-    public Restaurante salvar(@RequestBody Restaurante restaurante) {
+    public Restaurante salvar(@Valid  @RequestBody Restaurante restaurante) {
         try {
             return cadastroRestauranteService.salvar(restaurante);
         } catch (CozinhaNaoEncontradaException e) {

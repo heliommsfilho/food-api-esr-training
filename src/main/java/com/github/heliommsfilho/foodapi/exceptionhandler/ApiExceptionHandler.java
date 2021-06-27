@@ -9,10 +9,12 @@ import com.github.heliommsfilho.foodapi.domain.exception.EntidadeNaoEncontradaEx
 import com.github.heliommsfilho.foodapi.domain.exception.NegocioException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.TypeMismatchException;
+import org.springframework.beans.factory.parsing.Problem;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -98,6 +100,16 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                             .userMessage(MSG_ERRO_INTERNO_SERVIDOR).build();
 
         return super.handleExceptionInternal(ex, problem, headers, status, request);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        final String detail = "Um ou mais campos estão inválidos. Preencha os dados corretamente e tente novamente";
+        final Rfc7807 problem = createProblemBuilder(status, ProblemType.DADOS_INVALIDOS, detail)
+                                    .userMessage(detail).build();
+
+        return handleExceptionInternal(ex, problem, headers, status, request);
+
     }
 
     private  ResponseEntity<Object> handlerMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
