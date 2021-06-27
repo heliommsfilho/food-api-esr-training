@@ -74,7 +74,7 @@ public class RestauranteController {
     }
 
     @PostMapping
-    public Restaurante salvar(@Valid  @RequestBody Restaurante restaurante) {
+    public Restaurante salvar(@Valid @RequestBody Restaurante restaurante) {
         try {
             return cadastroRestauranteService.salvar(restaurante);
         } catch (CozinhaNaoEncontradaException e) {
