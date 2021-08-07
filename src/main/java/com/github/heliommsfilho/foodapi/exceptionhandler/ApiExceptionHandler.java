@@ -9,7 +9,9 @@ import com.github.heliommsfilho.foodapi.domain.exception.EntidadeNaoEncontradaEx
 import com.github.heliommsfilho.foodapi.domain.exception.NegocioException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.TypeMismatchException;
-import org.springframework.beans.factory.parsing.Problem;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +22,11 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.LocaleContextResolver;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -33,6 +35,9 @@ import java.util.stream.Collectors;
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     private final String MSG_ERRO_INTERNO_SERVIDOR = "Erro interno do servidor. Caso o problema persista, contacte o administrador do sistema";
+    
+    @Autowired
+    private MessageSource messageSource;
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleNotCaughtException(Exception ex, WebRequest request) {
@@ -110,10 +115,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         final BindingResult bindingResult = ex.getBindingResult();
         List<Rfc7807.Field> problemFields = bindingResult.getFieldErrors().stream()
-                                                            .map(fe -> Rfc7807.Field.builder()
-                                                                                .name(fe.getField())
-                                                                                .userMessage(fe.getDefaultMessage())
-                                                                                .build())
+                                                            .map(fe -> {
+                                                                final String message = messageSource.getMessage(fe, LocaleContextHolder.getLocale());
+                                                                return Rfc7807.Field.builder()
+                                                                        .name(fe.getField())
+                                                                        .userMessage(message)
+                                                                        .build();
+                                                            })
                                                             .collect(Collectors.toList());
 
         final Rfc7807 problem = createProblemBuilder(status, ProblemType.DADOS_INVALIDOS, detail)
