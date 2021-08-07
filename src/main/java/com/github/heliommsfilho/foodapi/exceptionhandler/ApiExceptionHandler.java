@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import org.springframework.web.servlet.LocaleContextResolver;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -34,7 +33,7 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
-    private final String MSG_ERRO_INTERNO_SERVIDOR = "Erro interno do servidor. Caso o problema persista, contacte o administrador do sistema";
+    private static final String MSG_ERRO_INTERNO_SERVIDOR = "Erro interno do servidor. Caso o problema persista, contacte o administrador do sistema";
     
     @Autowired
     private MessageSource messageSource;

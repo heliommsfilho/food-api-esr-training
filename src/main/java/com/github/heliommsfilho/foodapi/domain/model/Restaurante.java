@@ -2,6 +2,7 @@ package com.github.heliommsfilho.foodapi.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.heliommsfilho.foodapi.core.validation.Groups;
+import com.github.heliommsfilho.foodapi.core.validation.Multiplo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
@@ -46,7 +47,7 @@ public class Restaurante {
     private String nome;
 
     @NotNull
-    @PositiveOrZero
+    @Multiplo(numero = 5)
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 
