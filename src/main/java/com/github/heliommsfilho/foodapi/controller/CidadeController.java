@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -52,7 +53,7 @@ public class CidadeController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Cidade salvar(@RequestBody Cidade cidade) {
+    public Cidade salvar(@RequestBody @Valid Cidade cidade) {
         Long estadoId = cidade.getEstado().getId();
         Estado estado = cadastroEstadoService.buscarOuFalhar(estadoId);
         cidade.setEstado(estado);
@@ -73,7 +74,7 @@ public class CidadeController {
     }
 
     @PutMapping("/{id}")
-    public Cidade atualizar(@PathVariable Long id, @RequestBody Cidade cidade) {
+    public Cidade atualizar(@PathVariable Long id, @RequestBody @Valid Cidade cidade) {
         try {
             Cidade cidadeAtual = cadastroCidadeService.buscarOuFalhar(id);
             BeanUtils.copyProperties(cidade, cidadeAtual, "id");
