@@ -1,4 +1,4 @@
-package com.github.heliommsfilho.foodapi;
+package com.github.heliommsfilho.foodapi.core.validation;
 
 public interface Groups {
     

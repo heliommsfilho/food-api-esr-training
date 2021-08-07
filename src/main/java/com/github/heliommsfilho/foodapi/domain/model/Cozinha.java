@@ -1,6 +1,6 @@
 package com.github.heliommsfilho.foodapi.domain.model;
 
-import com.github.heliommsfilho.foodapi.Groups;
+import com.github.heliommsfilho.foodapi.core.validation.Groups;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
