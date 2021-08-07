@@ -9,9 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CadastroRestauranteService {
-
-    public static final String MSG_RESTAURANTE_EM_USO = "Restaurante de código %d não pode ser removido, pois está em uso";
-
+    
     private final RestauranteRepository restauranteRepository;
     private final CadastroCozinhaService cadastroCozinhaService;
 

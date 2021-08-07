@@ -2,7 +2,6 @@ package com.github.heliommsfilho.foodapi.controller;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 import com.github.heliommsfilho.foodapi.domain.exception.CozinhaNaoEncontradaException;
 import com.github.heliommsfilho.foodapi.domain.exception.NegocioException;
 import com.github.heliommsfilho.foodapi.domain.model.Restaurante;
@@ -11,7 +10,6 @@ import com.github.heliommsfilho.foodapi.domain.service.CadastroRestauranteServic
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpInputMessage;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
@@ -74,7 +72,7 @@ public class RestauranteController {
     }
 
     @PostMapping
-    public Restaurante salvar(@Valid @RequestBody Restaurante restaurante) {
+    public Restaurante salvar(@RequestBody @Valid Restaurante restaurante) {
         try {
             return cadastroRestauranteService.salvar(restaurante);
         } catch (CozinhaNaoEncontradaException e) {
