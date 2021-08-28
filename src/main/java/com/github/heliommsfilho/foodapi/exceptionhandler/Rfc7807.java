@@ -18,10 +18,10 @@ public class Rfc7807 {
     private String detail;
     private String userMessage;
     private LocalDateTime timestamp;
-    private List<Field> fields;
+    private List<Object> objects;
 
     @Getter @Builder
-    public static final class Field {
+    public static final class Object {
 
         private String name;
         private String userMessage;

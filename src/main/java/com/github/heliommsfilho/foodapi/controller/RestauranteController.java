@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.heliommsfilho.foodapi.domain.exception.CozinhaNaoEncontradaException;
 import com.github.heliommsfilho.foodapi.domain.exception.NegocioException;
+import com.github.heliommsfilho.foodapi.domain.exception.ValidacaoException;
 import com.github.heliommsfilho.foodapi.domain.model.Restaurante;
 import com.github.heliommsfilho.foodapi.domain.repository.RestauranteRepository;
 import com.github.heliommsfilho.foodapi.domain.service.CadastroRestauranteService;
@@ -14,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,12 +40,13 @@ public class RestauranteController {
 
     private final RestauranteRepository restauranteRepository;
     private final CadastroRestauranteService cadastroRestauranteService;
+    private final SmartValidator smartValidator;
 
     @Autowired
-    public RestauranteController(RestauranteRepository restauranteRepository,
-                                 CadastroRestauranteService cadastroRestauranteService) {
+    public RestauranteController(RestauranteRepository restauranteRepository, CadastroRestauranteService cadastroRestauranteService, SmartValidator smartValidator) {
         this.restauranteRepository = restauranteRepository;
         this.cadastroRestauranteService = cadastroRestauranteService;
+        this.smartValidator = smartValidator;
     }
 
     @GetMapping
@@ -96,9 +100,19 @@ public class RestauranteController {
     public Restaurante atualizarParcial(HttpServletRequest request, @PathVariable Long restauranteId, @RequestBody Map<String, Object> campos) {
         Restaurante restauranteAtual = cadastroRestauranteService.buscarOuFalhar(restauranteId);
         merge(request, campos, restauranteAtual);
+        validate(restauranteAtual, "Restaurante");
         return atualizar(restauranteId, restauranteAtual);
     }
-
+    
+    private void validate(final Restaurante restaurante, final String objectName) {
+        final BeanPropertyBindingResult errors = new BeanPropertyBindingResult(restaurante, objectName);
+        smartValidator.validate(restaurante, errors);
+        
+        if (errors.hasErrors()) {
+            throw new ValidacaoException(errors);
+        }
+    }
+    
     private void merge(HttpServletRequest request, Map<String, Object> camposOrigem, Restaurante restauranteDestino) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);

@@ -3,6 +3,7 @@ package com.github.heliommsfilho.foodapi.domain.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.heliommsfilho.foodapi.core.validation.Groups;
 import com.github.heliommsfilho.foodapi.core.validation.Multiplo;
+import com.github.heliommsfilho.foodapi.core.validation.ValorZeroIncluiDescricao;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
@@ -35,6 +36,7 @@ import java.util.List;
 @Table(name = "restaurante")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ValorZeroIncluiDescricao(valorField = "taxaFrete", descricaoField = "nome", descricaoObrigatoria = "Frete Grátis")
 public class Restaurante {
 
     @Id
@@ -47,6 +49,7 @@ public class Restaurante {
     private String nome;
 
     @NotNull
+    @PositiveOrZero
     @Multiplo(numero = 5)
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
