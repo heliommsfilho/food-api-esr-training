@@ -1,4 +1,4 @@
-package com.github.heliommsfilho.foodapi.infraestructure.repository;
+package com.github.heliommsfilho.foodapi.infrastructure.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;

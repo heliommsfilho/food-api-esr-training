@@ -1,4 +1,4 @@
-package com.github.heliommsfilho.foodapi.infraestructure.repository;
+package com.github.heliommsfilho.foodapi.infrastructure.repository;
 
 import com.github.heliommsfilho.foodapi.domain.model.Restaurante;
 import org.springframework.data.jpa.domain.Specification;
