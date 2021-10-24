@@ -1,6 +1,5 @@
 package com.github.heliommsfilho.foodapi.model;
 
-import com.github.heliommsfilho.foodapi.domain.model.Cozinha;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,4 +13,6 @@ public class RestauranteModel {
     private String nome;
     private BigDecimal taxaFrete;
     private CozinhaModel cozinha;
+    private EnderecoModel endereco;
+    private Boolean ativo;
 }
