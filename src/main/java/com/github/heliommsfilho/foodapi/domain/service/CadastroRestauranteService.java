@@ -1,6 +1,7 @@
 package com.github.heliommsfilho.foodapi.domain.service;
 
 import com.github.heliommsfilho.foodapi.domain.exception.RestauranteNaoEncontradoException;
+import com.github.heliommsfilho.foodapi.domain.model.Cidade;
 import com.github.heliommsfilho.foodapi.domain.model.Cozinha;
 import com.github.heliommsfilho.foodapi.domain.model.Restaurante;
 import com.github.heliommsfilho.foodapi.domain.repository.RestauranteRepository;
@@ -13,12 +14,15 @@ public class CadastroRestauranteService {
     
     private final RestauranteRepository restauranteRepository;
     private final CadastroCozinhaService cadastroCozinhaService;
+    private final CadastroCidadeService cadastroCidadeService;
 
     @Autowired
     public CadastroRestauranteService(RestauranteRepository restauranteRepository,
-                                      CadastroCozinhaService cadastroCozinhaService) {
+                                      CadastroCozinhaService cadastroCozinhaService,
+                                      CadastroCidadeService cadastroCidadeService) {
         this.restauranteRepository = restauranteRepository;
         this.cadastroCozinhaService = cadastroCozinhaService;
+        this.cadastroCidadeService = cadastroCidadeService;
     }
 
     @Transactional
@@ -26,6 +30,10 @@ public class CadastroRestauranteService {
         Long cozinhaId = restaurante.getCozinha().getId();
         Cozinha cozinha = cadastroCozinhaService.buscarOuFalhar(cozinhaId);
         restaurante.setCozinha(cozinha);
+        
+        final Long id = restaurante.getEndereco().getCidade().getId();
+        final Cidade cidade = cadastroCidadeService.buscarOuFalhar(id);
+        restaurante.getEndereco().setCidade(cidade);
 
         return restauranteRepository.save(restaurante);
     }

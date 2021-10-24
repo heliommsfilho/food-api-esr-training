@@ -2,6 +2,7 @@ package com.github.heliommsfilho.foodapi.controller;
 
 import com.github.heliommsfilho.foodapi.assembler.RestauranteInputDisassembler;
 import com.github.heliommsfilho.foodapi.assembler.RestauranteModelAssembler;
+import com.github.heliommsfilho.foodapi.domain.exception.CidadeNaoEncontradaException;
 import com.github.heliommsfilho.foodapi.domain.exception.CozinhaNaoEncontradaException;
 import com.github.heliommsfilho.foodapi.domain.exception.NegocioException;
 import com.github.heliommsfilho.foodapi.domain.model.Restaurante;
@@ -78,7 +79,7 @@ public class RestauranteController {
             Restaurante restauranteAtual = cadastroRestauranteService.buscarOuFalhar(id);
             disassembler.copyToDomainObject(restauranteInput, restauranteAtual);
             return assembler.toModel(cadastroRestauranteService.salvar(restauranteAtual));
-        } catch (CozinhaNaoEncontradaException e) {
+        } catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
             throw new NegocioException(e.getMessage());
         }
     }
