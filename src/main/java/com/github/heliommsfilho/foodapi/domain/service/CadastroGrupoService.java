@@ -3,6 +3,7 @@ package com.github.heliommsfilho.foodapi.domain.service;
 import com.github.heliommsfilho.foodapi.domain.exception.EntidadeEmUsoException;
 import com.github.heliommsfilho.foodapi.domain.exception.GrupoNaoEncontradoException;
 import com.github.heliommsfilho.foodapi.domain.model.Grupo;
+import com.github.heliommsfilho.foodapi.domain.model.Permissao;
 import com.github.heliommsfilho.foodapi.domain.repository.GrupoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -18,6 +19,9 @@ public class CadastroGrupoService {
     
     @Autowired
     private GrupoRepository grupoRepository;
+    
+    @Autowired
+    private CadastroPermissaoService cadastroPermissao;
     
     @Transactional
     public Grupo salvar(Grupo grupo) {
@@ -37,6 +41,22 @@ public class CadastroGrupoService {
             throw new EntidadeEmUsoException(
                     String.format(MSG_GRUPO_EM_USO, grupoId));
         }
+    }
+    
+    @Transactional
+    public void desassociarPermissao(Long grupoId, Long permissaoId) {
+        Grupo grupo = buscarOuFalhar(grupoId);
+        Permissao permissao = cadastroPermissao.buscarOuFalhar(permissaoId);
+        
+        grupo.removerPermissao(permissao);
+    }
+    
+    @Transactional
+    public void associarPermissao(Long grupoId, Long permissaoId) {
+        Grupo grupo = buscarOuFalhar(grupoId);
+        Permissao permissao = cadastroPermissao.buscarOuFalhar(permissaoId);
+        
+        grupo.adicionarPermissao(permissao);
     }
     
     public Grupo buscarOuFalhar(Long grupoId) {

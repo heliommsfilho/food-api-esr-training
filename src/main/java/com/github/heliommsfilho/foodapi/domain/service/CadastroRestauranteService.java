@@ -5,6 +5,7 @@ import com.github.heliommsfilho.foodapi.domain.model.Cidade;
 import com.github.heliommsfilho.foodapi.domain.model.Cozinha;
 import com.github.heliommsfilho.foodapi.domain.model.FormaPagamento;
 import com.github.heliommsfilho.foodapi.domain.model.Restaurante;
+import com.github.heliommsfilho.foodapi.domain.model.Usuario;
 import com.github.heliommsfilho.foodapi.domain.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,16 +18,19 @@ public class CadastroRestauranteService {
     private final CadastroCozinhaService cadastroCozinhaService;
     private final CadastroCidadeService cadastroCidadeService;
     private final CadastroFormaPagamentoService cadastroFormaPagamentoService;
+    private final CadastroUsuarioService cadastroUsuarioService;
 
     @Autowired
     public CadastroRestauranteService(RestauranteRepository restauranteRepository,
                                       CadastroCozinhaService cadastroCozinhaService,
                                       CadastroCidadeService cadastroCidadeService,
-                                      CadastroFormaPagamentoService cadastroFormaPagamentoService) {
+                                      CadastroFormaPagamentoService cadastroFormaPagamentoService,
+                                      CadastroUsuarioService cadastroUsuarioService) {
         this.restauranteRepository = restauranteRepository;
         this.cadastroCozinhaService = cadastroCozinhaService;
         this.cadastroCidadeService = cadastroCidadeService;
         this.cadastroFormaPagamentoService = cadastroFormaPagamentoService;
+        this.cadastroUsuarioService = cadastroUsuarioService;
     }
 
     @Transactional
@@ -86,6 +90,22 @@ public class CadastroRestauranteService {
         Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
         
         restauranteAtual.fechar();
+    }
+    
+    @Transactional
+    public void desassociarResponsavel(Long restauranteId, Long usuarioId) {
+        Restaurante restaurante = buscarOuFalhar(restauranteId);
+        Usuario usuario = cadastroUsuarioService.buscarOuFalhar(usuarioId);
+        
+        restaurante.removerResponsavel(usuario);
+    }
+    
+    @Transactional
+    public void associarResponsavel(Long restauranteId, Long usuarioId) {
+        Restaurante restaurante = buscarOuFalhar(restauranteId);
+        Usuario usuario = cadastroUsuarioService.buscarOuFalhar(usuarioId);
+        
+        restaurante.adicionarResponsavel(usuario);
     }
     
     public Restaurante buscarOuFalhar(Long id) {
