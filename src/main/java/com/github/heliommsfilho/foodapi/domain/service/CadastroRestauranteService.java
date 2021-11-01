@@ -3,6 +3,7 @@ package com.github.heliommsfilho.foodapi.domain.service;
 import com.github.heliommsfilho.foodapi.domain.exception.RestauranteNaoEncontradoException;
 import com.github.heliommsfilho.foodapi.domain.model.Cidade;
 import com.github.heliommsfilho.foodapi.domain.model.Cozinha;
+import com.github.heliommsfilho.foodapi.domain.model.FormaPagamento;
 import com.github.heliommsfilho.foodapi.domain.model.Restaurante;
 import com.github.heliommsfilho.foodapi.domain.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +16,17 @@ public class CadastroRestauranteService {
     private final RestauranteRepository restauranteRepository;
     private final CadastroCozinhaService cadastroCozinhaService;
     private final CadastroCidadeService cadastroCidadeService;
+    private final CadastroFormaPagamentoService cadastroFormaPagamentoService;
 
     @Autowired
     public CadastroRestauranteService(RestauranteRepository restauranteRepository,
                                       CadastroCozinhaService cadastroCozinhaService,
-                                      CadastroCidadeService cadastroCidadeService) {
+                                      CadastroCidadeService cadastroCidadeService,
+                                      CadastroFormaPagamentoService cadastroFormaPagamentoService) {
         this.restauranteRepository = restauranteRepository;
         this.cadastroCozinhaService = cadastroCozinhaService;
         this.cadastroCidadeService = cadastroCidadeService;
+        this.cadastroFormaPagamentoService = cadastroFormaPagamentoService;
     }
 
     @Transactional
@@ -52,6 +56,22 @@ public class CadastroRestauranteService {
         restauranteAtual.inativar();
         
         restauranteRepository.save(restauranteAtual);
+    }
+    
+    @Transactional
+    public void desassociarFormaPagamento(final Long restauranteId, final Long formaPagamentoId) {
+        final Restaurante restaurante = buscarOuFalhar(restauranteId);
+        final FormaPagamento formaPagamento = cadastroFormaPagamentoService.buscarOuFalhar(formaPagamentoId);
+        
+        restaurante.removerFormaPagamento(formaPagamento);
+    }
+    
+    @Transactional
+    public void associarFormaPagamento(final Long restauranteId, final Long formaPagamentoId) {
+        final Restaurante restaurante = buscarOuFalhar(restauranteId);
+        final FormaPagamento formaPagamento = cadastroFormaPagamentoService.buscarOuFalhar(formaPagamentoId);
+        
+        restaurante.adicionarFormaPagamento(formaPagamento);
     }
 
     public Restaurante buscarOuFalhar(Long id) {
