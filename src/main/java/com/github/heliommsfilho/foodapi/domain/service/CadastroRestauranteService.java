@@ -1,5 +1,6 @@
 package com.github.heliommsfilho.foodapi.domain.service;
 
+import com.github.heliommsfilho.foodapi.domain.exception.NegocioException;
 import com.github.heliommsfilho.foodapi.domain.exception.RestauranteNaoEncontradoException;
 import com.github.heliommsfilho.foodapi.domain.model.Cidade;
 import com.github.heliommsfilho.foodapi.domain.model.Cozinha;
@@ -10,6 +11,8 @@ import com.github.heliommsfilho.foodapi.domain.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class CadastroRestauranteService {
@@ -60,6 +63,24 @@ public class CadastroRestauranteService {
         restauranteAtual.inativar();
         
         restauranteRepository.save(restauranteAtual);
+    }
+    
+    @Transactional
+    public void ativar (final List<Long> restauranteIds) {
+        try {
+            restauranteIds.forEach(this::ativar);
+        } catch (RestauranteNaoEncontradoException e) {
+            throw new NegocioException(e.getMessage(), e);
+        }
+    }
+    
+    @Transactional
+    public void inativar (final List<Long> restauranteIds) {
+        try {
+            restauranteIds.forEach(this::inativar);
+        } catch (RestauranteNaoEncontradoException e) {
+            throw new NegocioException(e.getMessage(), e);
+        }
     }
     
     @Transactional
