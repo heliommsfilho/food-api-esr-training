@@ -35,4 +35,19 @@ public class ItemPedido {
     private BigDecimal precoUnitario;
     private BigDecimal precoTotal;
     private String observacao;
+    
+    public void calcularPrecoTotal() {
+        BigDecimal precoUnitario = this.getPrecoUnitario();
+        Integer quantidade = this.getQuantidade();
+        
+        if (precoUnitario == null) {
+            precoUnitario = BigDecimal.ZERO;
+        }
+        
+        if (quantidade == null) {
+            quantidade = 0;
+        }
+        
+        this.setPrecoTotal(precoUnitario.multiply(new BigDecimal(quantidade)));
+    }
 }
