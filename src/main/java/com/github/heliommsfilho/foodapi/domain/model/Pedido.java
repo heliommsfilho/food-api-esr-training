@@ -1,5 +1,6 @@
 package com.github.heliommsfilho.foodapi.domain.model;
 
+import com.github.heliommsfilho.foodapi.domain.exception.NegocioException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
@@ -16,11 +17,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -32,6 +35,8 @@ public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    private String codigo;
 
     private BigDecimal subtotal;
     private BigDecimal taxaFrete;
@@ -65,6 +70,11 @@ public class Pedido {
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
     private List<ItemPedido> itens = new ArrayList<>();
     
+    @PrePersist
+    private void gerarCodigo() {
+        setCodigo(UUID.randomUUID().toString());
+    }
+    
     public void calcularValorTotal() {
         getItens().forEach(ItemPedido::calcularPrecoTotal);
         
@@ -81,5 +91,30 @@ public class Pedido {
     
     public void atribuirPedidoAosItens() {
         getItens().forEach(item -> item.setPedido(this));
+    }
+    
+    public void confirmar() {
+        setStatus(PedidoStatus.CONFIRMADO);
+        setDataConfirmacao(OffsetDateTime.now());
+    }
+    
+    public void entregar() {
+        setStatus(PedidoStatus.ENTREGUE);
+        setDataEntrega(OffsetDateTime.now());
+    }
+    
+    public void cancelar() {
+        setStatus(PedidoStatus.CANCELADO);
+        setDataCancelamento(OffsetDateTime.now());
+    }
+    
+    private void setStatus(PedidoStatus novoStatus) {
+        
+        if (getStatus().naoPodeAlterarPara(novoStatus)) {
+            throw new NegocioException(String.format("Status do pedido %s não pode ser alterado de %s para %s.",
+                                                     getCodigo(), getStatus().getDescricao(), novoStatus.getDescricao()));
+        }
+        
+        this.status = novoStatus;
     }
 }
