@@ -8,7 +8,9 @@ import com.github.heliommsfilho.foodapi.domain.exception.NegocioException;
 import com.github.heliommsfilho.foodapi.domain.model.Pedido;
 import com.github.heliommsfilho.foodapi.domain.model.Usuario;
 import com.github.heliommsfilho.foodapi.domain.repository.PedidoRepository;
+import com.github.heliommsfilho.foodapi.domain.repository.filter.PedidoFilter;
 import com.github.heliommsfilho.foodapi.domain.service.EmissaoPedidoService;
+import com.github.heliommsfilho.foodapi.infrastructure.repository.PedidoSpecs;
 import com.github.heliommsfilho.foodapi.model.PedidoModel;
 import com.github.heliommsfilho.foodapi.model.PedidoResumoModel;
 import com.github.heliommsfilho.foodapi.model.input.PedidoInput;
@@ -45,8 +47,8 @@ public class PedidoController {
     private PedidoInputDisassembler pedidoInputDisassembler;
     
     @GetMapping
-    public List<PedidoResumoModel> listar() {
-        List<Pedido> todosPedidos = pedidoRepository.findAll();
+    public List<PedidoResumoModel> pesquisar(PedidoFilter filtro) {
+        List<Pedido> todosPedidos = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro));
         
         return pedidoResumoModelAssembler.toCollectionModel(todosPedidos);
     }
