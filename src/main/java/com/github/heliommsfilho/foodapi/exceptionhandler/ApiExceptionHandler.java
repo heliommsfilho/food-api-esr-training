@@ -17,6 +17,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -27,7 +28,6 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import javax.naming.Binding;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -40,7 +40,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     
     @Autowired
     private MessageSource messageSource;
-
+    
+    @Override
+    protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        return handleValidationInternal(ex, ex.getBindingResult(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+    
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleNotCaughtException(Exception ex, WebRequest request) {
         Rfc7807 problem = createProblemBuilder(HttpStatus.INTERNAL_SERVER_ERROR, ProblemType.ERRO_INTERNO_SERVIDOR, MSG_ERRO_INTERNO_SERVIDOR)
@@ -113,7 +118,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        return handleValidationInternal(ex, ex.getBindingResult(), headers, status, request);
+        return handleValidationInternal(ex, ex.getBindingResult(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    
     }
     
     @ExceptionHandler({ValidacaoException.class})
@@ -166,23 +172,23 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     
     private ResponseEntity<Object> handleValidationInternal(final Exception exception, final BindingResult bindingResult, final HttpHeaders httpHeaders,
                                                             final HttpStatus httpStatus, final WebRequest webRequest) {
-        final ProblemType problemType = ProblemType.DADOS_INVALIDOS;
         final String detail = "Um ou mais campos estão inválidos. Preencha os dados corretamente e tente novamente";
-        final List<Rfc7807.Object> problemObjects = bindingResult.getAllErrors().stream()
-                                                                                .map(objectError -> {
-                                                                                    final String message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale());
-                                                                                    String name = objectError.getObjectName();
+        final List<Rfc7807.Object> problemObjects = bindingResult.getAllErrors()
+                                                        .stream()
+                                                        .map(objectError -> {
+                                                            final String message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale());
+                                                            String name = objectError.getObjectName();
                                                                             
-                                                                                    if (objectError instanceof FieldError) {
-                                                                                        name = ((FieldError) objectError).getField();
-                                                                                    }
+                                                            if (objectError instanceof FieldError) {
+                                                                name = ((FieldError) objectError).getField();
+                                                            }
                                                                             
-                                                                                    return Rfc7807.Object.builder()
-                                                                                            .name(name)
-                                                                                            .userMessage(message)
-                                                                                            .build();
-                                                                                })
-                                                                                .collect(Collectors.toList());
+                                                            return Rfc7807.Object.builder()
+                                                                    .name(name)
+                                                                    .userMessage(message)
+                                                                    .build();
+                                                        })
+                                                        .collect(Collectors.toList());
     
         final Rfc7807 problem = createProblemBuilder(httpStatus, ProblemType.DADOS_INVALIDOS, detail)
                                     .userMessage(detail)
