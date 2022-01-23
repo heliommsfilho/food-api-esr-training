@@ -9,8 +9,11 @@ import com.github.heliommsfilho.foodapi.domain.repository.CozinhaRepository;
 import com.github.heliommsfilho.foodapi.domain.service.CadastroCozinhaService;
 import com.github.heliommsfilho.foodapi.model.CozinhaModel;
 import com.github.heliommsfilho.foodapi.model.input.CozinhaInput;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -45,10 +48,11 @@ public class CozinhaController {
     }
     
     @GetMapping
-    public List<CozinhaModel> listar() {
-        List<Cozinha> todasCozinhas = cozinhaRepository.findAll();
+    public Page<CozinhaModel> listar(@PageableDefault(size = 2) final Pageable pageable) {
+        Page<Cozinha> cozinhasPage = cozinhaRepository.findAll(pageable);
         
-        return cozinhaModelAssembler.toCollectionModel(todasCozinhas);
+        final List<CozinhaModel> cozinhasModel =  cozinhaModelAssembler.toCollectionModel(cozinhasPage.getContent());
+        return new PageImpl<>(cozinhasModel, pageable, cozinhasPage.getTotalElements());
     }
     
     @GetMapping("/{cozinhaId}")
