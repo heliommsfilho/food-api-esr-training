@@ -1,7 +1,7 @@
 package com.github.heliommsfilho.foodapi.infrastructure.repository;
 
 import com.github.heliommsfilho.foodapi.domain.model.Pedido;
-import com.github.heliommsfilho.foodapi.domain.repository.filter.PedidoFilter;
+import com.github.heliommsfilho.foodapi.domain.filter.PedidoFilter;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.Predicate;

@@ -1,4 +1,4 @@
-package com.github.heliommsfilho.foodapi.domain.repository.filter;
+package com.github.heliommsfilho.foodapi.domain.filter;
 
 import lombok.Getter;
 import lombok.Setter;

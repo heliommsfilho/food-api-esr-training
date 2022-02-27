@@ -9,7 +9,7 @@ import com.github.heliommsfilho.foodapi.domain.exception.NegocioException;
 import com.github.heliommsfilho.foodapi.domain.model.Pedido;
 import com.github.heliommsfilho.foodapi.domain.model.Usuario;
 import com.github.heliommsfilho.foodapi.domain.repository.PedidoRepository;
-import com.github.heliommsfilho.foodapi.domain.repository.filter.PedidoFilter;
+import com.github.heliommsfilho.foodapi.domain.filter.PedidoFilter;
 import com.github.heliommsfilho.foodapi.domain.service.EmissaoPedidoService;
 import com.github.heliommsfilho.foodapi.infrastructure.repository.PedidoSpecs;
 import com.github.heliommsfilho.foodapi.model.PedidoModel;
