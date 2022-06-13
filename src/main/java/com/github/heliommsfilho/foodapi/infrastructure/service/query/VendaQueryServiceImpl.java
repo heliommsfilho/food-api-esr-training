@@ -1,4 +1,4 @@
-package com.github.heliommsfilho.foodapi.infrastructure.service;
+package com.github.heliommsfilho.foodapi.infrastructure.service.query;
 
 import com.github.heliommsfilho.foodapi.domain.filter.VendaDiariaFilter;
 import com.github.heliommsfilho.foodapi.domain.model.Pedido;
